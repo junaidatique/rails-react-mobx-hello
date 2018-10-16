@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Container, Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink, Fa } from 'mdbreact';
-
+import { Navbar, NavbarBrand, NavbarNav, NavbarToggler, Collapse, NavItem, NavLink } from 'mdbreact';
+import { observer, inject } from 'mobx-react'
 class NavHeader extends Component {
   constructor(props) {
     super(props);
@@ -15,7 +15,11 @@ class NavHeader extends Component {
       collapse: !this.state.collapse,
     });
   }
+  filter(e) {
+    this.props.contactStore['filter'] = e.target.value
+  }
   render() {
+    const { filter } = this.props.contactStore;
     return (
       <Navbar color="indigo" dark expand="md" scrolling static="top">
         <NavbarBrand href="/">
@@ -35,7 +39,7 @@ class NavHeader extends Component {
           <NavbarNav right>
             <NavItem>
               <form className="form-inline mt-0">
-                <input className="form-control mr-sm-2 mb-0 text-white" type="text" placeholder="Search" aria-label="Search" />
+                <input className="form-control mr-sm-2 mb-0" type="text" placeholder="Search" aria-label="Search" value={filter} onChange={this.filter.bind(this)} />
               </form>
             </NavItem>
           </NavbarNav>
@@ -45,5 +49,5 @@ class NavHeader extends Component {
     );
   }
 }
-
+NavHeader = inject("contactStore")(observer(NavHeader))
 export default NavHeader;
